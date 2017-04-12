@@ -1,5 +1,5 @@
 {
-  "name": "bulls and bears",
+  "name": "bnb",
   "version": "1.0.0",
   "description": "virtual stock market app",
   "main": "server.js",
