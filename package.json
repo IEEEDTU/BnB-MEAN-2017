@@ -1,7 +1,7 @@
 {
-  "name": "meantutorial",
+  "name": "bulls and bears",
   "version": "1.0.0",
-  "description": "mean stack application",
+  "description": "virtual stock market app",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,7 @@
     "MEAN",
     "stack"
   ],
-  "author": "David Acosta",
+  "author": "IEEE DTU",
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
