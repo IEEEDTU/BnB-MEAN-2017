@@ -16,10 +16,12 @@ app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x
 app.use(express.static(__dirname + '/public')); // Allow front end to access public folder
 app.use('/api', appRoutes); // Assign name to end points (e.g., '/api/management/', '/api/users' ,etc. )
 
+mongoose.Promise = global.Promise;
+
 // 
 // <---------- REPLACE WITH YOUR MONGOOSE CONFIGURATION ---------->
 // 
-mongoose.connect('mongodb://root:password@ds027215.mlab.com:27215/gugui3z24', function(err) {
+mongoose.connect('mongodb://commonfake59:hostel59@ds159330.mlab.com:59330/bnb', function(err) {
     if (err) {
         console.log('Not connected to the database: ' + err); // Log to console if unable to connect to database
     } else {
