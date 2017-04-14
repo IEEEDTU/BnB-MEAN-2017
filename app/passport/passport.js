@@ -38,9 +38,9 @@ module.exports = function(app, passport) {
 
     // Facebook Strategy    
     passport.use(new FacebookStrategy({
-            clientID: '210306086123010', // Replace with your Facebook Developer App client ID
-            clientSecret: '7285e8ee9fbcb578ffb83f91e6779047', // Replace with your Facebook Developer client secret
-            callbackURL: "https://localhost:8080/auth/facebook/callback", // Replace with your Facebook Developer App callback URL
+            clientID: '360372877690038', // Replace with your Facebook Developer App client ID
+            clientSecret: '9ecc00dd0941c1afe5c9cb3f6451fdad', // Replace with your Facebook Developer client secret
+            callbackURL: "http://localhost:8080/auth/facebook/callback", // Replace with your Facebook Developer App callback URL
             profileFields: ['id', 'displayName', 'photos', 'email']
         },
         function(accessToken, refreshToken, profile, done) {
