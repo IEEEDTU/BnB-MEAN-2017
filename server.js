@@ -1,38 +1,53 @@
-var express = require('express'); // ExperssJS Framework
-var app = express(); // Invoke express to variable for use in application
-var port = process.env.PORT || 8080; // Set default port or assign a port in enviornment
-var morgan = require('morgan'); // Import Morgan Package
-var mongoose = require('mongoose'); // HTTP request logger middleware for Node.js
-var bodyParser = require('body-parser'); // Node.js body parsing middleware. Parses incoming request bodies in a middleware before your handlers, available under req.body.
-var router = express.Router(); // Invoke the Express Router
-var appRoutes = require('./app/routes/api')(router); // Import the application end points/API
-var path = require('path'); // Import path module
-var passport = require('passport'); // Express-compatible authentication middleware for Node.js.
-var social = require('./app/passport/passport')(app, passport); // Import passport.js End Points/API
+// server.js
 
-app.use(morgan('dev')); // Morgan Middleware
-app.use(bodyParser.json()); // Body-parser middleware
-app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
-app.use(express.static(__dirname + '/public')); // Allow front end to access public folder
-app.use('/api', appRoutes); // Assign name to end points (e.g., '/api/management/', '/api/users' ,etc. )
+// set up ======================================================================
+// get all the tools we need
+var express  = require('express');
+var app      = express();
+var port     = process.env.PORT || 3000;
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
 
-// 
-// <---------- REPLACE WITH YOUR MONGOOSE CONFIGURATION ---------->
-// 
-mongoose.connect('mongodb://localhost:27017/bnbMEAN', function(err) {
-    if (err) {
-        console.log('Not connected to the database: ' + err); // Log to console if unable to connect to database
-    } else {
-        console.log('Successfully connected to MongoDB'); // Log to console if able to connect to database
-    }
-});
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
 
-// Set Application Static Layout
+var configDB = require('./config/database.js');
+
+// configuration ===============================================================
+mongoose.connect(configDB.url , function(err){
+ if(err) console.log('Unable to connect to DB ' + err);
+ else console.log('Connection to DB successful')
+}); // connect to our database
+require('./config/passport')(passport); // pass passport for configuration
+
+// set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.set('view engine', 'ejs'); // set up ejs for templating
+
+// required for passport
+app.use(session({
+    secret: 'fbloginboilerplate', // session secret
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+// routes ======================================================================
+require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
 app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname + '/public/app/views/index.html')); // Set index.html as layout
-});
+        res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+    });
 
-// Start Server
-app.listen(port, function() {
-    console.log('Running the server on port ' + port); // Listen on configured port
-});
+// launch ======================================================================
+app.listen(port);
+console.log('The magic happens on port ' + port);
