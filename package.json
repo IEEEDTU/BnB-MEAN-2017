@@ -1,6 +1,9 @@
 {
   "name": "bnb2018",
   "main": "server.js",
+  "scripts" :{
+     "test":"mocha"
+   },
   "dependencies" : {
     "express": "~4.14.0",
     "ejs": "~2.5.2",

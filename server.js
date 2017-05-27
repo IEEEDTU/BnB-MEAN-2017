@@ -16,6 +16,7 @@ var session      = require('express-session');
 
 var configDB = require('./config/database.js');
 
+mongoose.Promise = global.Promise;
 // configuration ===============================================================
 mongoose.connect(configDB.url , function(err){
  if(err) console.log('Unable to connect to DB ' + err);
