@@ -74,6 +74,17 @@ describe('Saving data', function(){
 			// done();
 		});
 	});
+
+	it('trying populate', function(){
+		Company
+		.findOne({ symbol: 'AMZN' })
+		.populate('_creator')
+		.exec(function (err, story) {
+		if (err) return handleError(err);
+		console.log('The creator is %s', story._creator.name);
+		// prints "The creator is Aaron"
+		});
+	});
 });
 
 // //drop 	the characters collection before each test

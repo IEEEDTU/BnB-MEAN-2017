@@ -1,5 +1,6 @@
 // load all the things we need
 var FacebookStrategy = require('passport-facebook').Strategy;
+var parameters = require('../app/parameters');
 // load up the user model
 var User       = require('../app/models/Customer');
 
@@ -71,8 +72,12 @@ module.exports = function(passport) {
                             newUser.facebook.token = token;
                             newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                             newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                            newUser.accountBalance = 0;
+                            newUser.accountBalance = parameters.accountBalance;
                             newUser.ban = false;
+                            newUser.loan.taken = false;
+                            newUser.loan.amount = 0;
+                            console.log(newUser);
+
                         } catch (err){
                             console.log(err);
                         }

@@ -35,12 +35,12 @@ var customerSchema = mongoose.Schema({
         quantity : {type: Number, default: 0, min : 0.0},
     }],
 
-    loan : [{
-        taken : {type: Boolean, default: false},
+    loan : {
+        taken : {type: Boolean, default: false, required: true},
         amount : {type: Number, min: 0.0, max: parameters.loanAmount},
         takeOutTime : Date,
         repayTime : Date
-    }]
+    }
 
 
 });
