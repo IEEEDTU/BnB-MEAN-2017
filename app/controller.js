@@ -61,3 +61,15 @@ exports.customerDetail = function(req, res) {
 	}
   });
 };
+
+exports.customerUpdate = function(req, res) {
+  customer.findById(req.params.id, function(err, customerdetail) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch company details");
+	}else {
+		
+		res.json(customerdetail);
+	}
+  });
+};

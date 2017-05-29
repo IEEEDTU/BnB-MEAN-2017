@@ -46,6 +46,7 @@ app.route('/newsdetail/:id')
 
 app.route('/customerdetail/:id')
     .get(isLoggedIn, controller.customerDetail)
+    .put(isLoggedIn, controller.customerUpdate)
 
 
 
@@ -102,8 +103,17 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
     else if(req.headers.authorization){
-                console.log('header ' + req.headers.authorization );
-                
+                var header = req.headers.authorization;
+                console.log('header ' + header );
+                var customer = require('./models/Customer');
+                customer.findOne({'facebook.token' : header}, function(err,cust){
+                if (err){
+                    console.log(err);
+                    res.redirect('/');
+                }
+                console.log(cust);
+                return next();
+            })
                 return next();
             }else{
                 console.log('no header');
