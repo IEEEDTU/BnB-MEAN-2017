@@ -7,7 +7,7 @@ var controller = require('./controller.js')
     
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
-        console.log()
+        // console.log(req.user)
         res.render('profile.ejs', {
             user : req.user
         });

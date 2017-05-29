@@ -38,7 +38,7 @@ module.exports = function(passport) {
         // asynchronous
         process.nextTick(function() {
 
-            console.log(profile);
+            // console.log(profile);
 
             // check if the user is already logged in
             if (!req.user) {
@@ -76,7 +76,7 @@ module.exports = function(passport) {
                             newUser.ban = false;
                             newUser.loan.taken = false;
                             newUser.loan.amount = 0;
-                            console.log(newUser);
+                            // console.log(newUser);
 
                         } catch (err){
                             console.log(err);
