@@ -29,22 +29,24 @@ var controller = require('./controller.js')
 // ============================================================================
 
 app.route('/companylist')
-    .get(controller.companyList)
+    .get(isLoggedIn, controller.companyList)
 
 app.route('/companydetail/:id')
-    .get(controller.companyDetails)
+    .get(isLoggedIn, controller.companyDetails)
 
 app.route('/newslist/')
-    .get(controller.newsList)
+    .get(isLoggedIn, controller.newsList)
 
 app.route('/newsdetail/:id')
-    .get(controller.newsDetails)
+    .get(isLoggedIn, controller.newsDetails)
 
 // ============================================================================
 // Customer  ===============================================================
 // ============================================================================
 
-
+app.route('/customerdetail/:id')
+    .get(isLoggedIn, controller.customerDetail)
+    .put(isLoggedIn, controller.customerUpdate)
 
 
 
@@ -96,11 +98,26 @@ app.route('/newsdetail/:id')
         });
     });
 };
-
 // route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-
-    res.redirect('/');
+    else if(req.headers.authorization){
+                var header = req.headers.authorization;
+                console.log('header ' + header );
+                var customer = require('./models/Customer');
+                customer.findOne({'facebook.token' : header}, function(err,cust){
+                if (err){
+                    console.log(err);
+                    res.redirect('/');
+                }
+                console.log(cust);
+                return next();
+            })
+                return next();
+            }else{
+                console.log('no header');
+                res.redirect('/');
+            }
+            
 }

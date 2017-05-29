@@ -3,16 +3,16 @@ var company = require('./models/company');
 var customer = require('./models/Customer');
 var news = require('./models/news');
 
-exports.companyList = function(req, res, authToken) {
+exports.companyList = function(req, res) {
   company.find({}, function(err, companies) {
     if (err){
 		console.log(err);
 		res.send("unable to fetch company list");
+	}else {
+		var accountBal = {'accountBalance' : req.user.accountBalance}
+		companies.push(accountBal);
+		res.json(companies);
 	}
-	console.log(req.headers.authorization);
-	console.log(req.user);
-	// if (req.user.facebook.token = )
-    res.json(companies);
   });
 };
 
@@ -22,8 +22,9 @@ exports.companyDetails = function(req, res) {
     if (err){
 		console.log(err);
 		res.send("unable to fetch company details");
+	}else {
+		res.json(compDetails);
 	}
-    res.json(compDetails);
   });
 };
 
@@ -32,8 +33,9 @@ exports.newsList = function(req, res) {
     if (err){
 		console.log(err);
 		res.send("unable to fetch company list");
+	}else {
+		res.json(newslist);
 	}
-    res.json(newslist);
   });
 };
 
@@ -43,7 +45,31 @@ exports.newsDetails = function(req, res) {
     if (err){
 		console.log(err);
 		res.send("unable to fetch company details");
+	}else {
+		res.json(newsdetail);
 	}
-    res.json(newsdetail);
+  });
+};
+
+exports.customerDetail = function(req, res) {
+  customer.findById(req.params.id, function(err, customerdetail) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch company details");
+	}else {
+		res.json(customerdetail);
+	}
+  });
+};
+
+exports.customerUpdate = function(req, res) {
+  customer.findById(req.params.id, function(err, customerdetail) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch company details");
+	}else {
+		
+		res.json(customerdetail);
+	}
   });
 };
