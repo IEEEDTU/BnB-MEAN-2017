@@ -1,4 +1,5 @@
 module.exports = function(app, passport) {
+var controller = require('./controller.js')
 
 // normal routes ===============================================================
 
@@ -6,6 +7,7 @@ module.exports = function(app, passport) {
     
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
+        // console.log(req.user)
         res.render('profile.ejs', {
             user : req.user
         });
@@ -26,7 +28,17 @@ module.exports = function(app, passport) {
 // Stock Market ===============================================================
 // ============================================================================
 
-app.get('/companylist')
+app.route('/companylist')
+    .get(controller.companyList)
+
+app.route('/companydetail/:id')
+    .get(controller.companyDetails)
+
+app.route('/newslist/')
+    .get(controller.newsList)
+
+app.route('/newsdetail/:id')
+    .get(controller.newsDetails)
 
 // ============================================================================
 // Customer  ===============================================================
