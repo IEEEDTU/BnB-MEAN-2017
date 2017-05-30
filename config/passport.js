@@ -1,5 +1,7 @@
 // load all the things we need
 var FacebookStrategy = require('passport-facebook').Strategy;
+var FacebookTokenStrategy = require('passport-facebook-token');
+ 
 var parameters = require('../app/parameters');
 // load up the user model
 var User       = require('../app/models/Customer');
@@ -26,6 +28,28 @@ module.exports = function(passport) {
             done(err, user);
         });
     });
+
+
+    //=========================================================================
+    //== FaceBook Token =======================================================
+    //=========================================================================
+
+    passport.use(new FacebookTokenStrategy({
+        clientID: configAuth.facebookAuth.clientID,
+        clientSecret: configAuth.facebookAuth.clientSecret
+    }, function(accessToken, refreshToken, profile, done) {
+        // console.log(accessToken);
+        // console.log(profile);
+
+        User.findOne({ 'facebook.id' : profile.id }, function (error, user) {
+        return done(error, user);
+        });
+    }
+    ));
+
+
+
+
 
     // =========================================================================
     // FACEBOOK ================================================================
@@ -71,7 +95,9 @@ module.exports = function(passport) {
                             newUser.facebook.id    = profile.id;
                             newUser.facebook.token = token;
                             newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-                            newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
+                            if (profile.emails){
+                                newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
+                            }
                             newUser.accountBalance = parameters.accountBalance;
                             newUser.ban = false;
                             newUser.loan.taken = false;

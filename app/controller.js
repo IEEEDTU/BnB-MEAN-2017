@@ -87,7 +87,7 @@ exports.newsList = function(req, res) {
   news.find({}, function(err, newslist) {
     if (err){
 		console.log(err);
-		res.send("unable to fetch company list");
+		res.send("unable to fetch news list");
 	}else {
 		res.json(newslist);
 	}
@@ -137,7 +137,15 @@ exports.customerList = function(req, res) {
 
 
 exports.buy = function(req, res){
-
+    customer.findById(req.user._id, function(err, customerdetail) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch customer details");
+	}else {
+        
+		res.json(customerdetail);
+	}
+  });
 }
 
 exports.sell = function(req, res){

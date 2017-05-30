@@ -29,44 +29,44 @@ var controller = require('./controller.js')
 // ============================================================================
 
 app.route('/companylist')
-    .get(isLoggedIn, controller.companyList);;
+    .get(passport.authenticate('facebook-token'), controller.companyList);;
 
 app.route('/companydetail/:id')
-    .get(isLoggedIn, controller.companyDetails);
+    .get(passport.authenticate('facebook-token'), controller.companyDetails);
 
 app.route('/newslist/')
-    .get(isLoggedIn, controller.newsList);
+    .get(passport.authenticate('facebook-token'), controller.newsList);
 
 app.route('/newsdetail/:id')
-    .get(isLoggedIn, controller.newsDetails);
+    .get(passport.authenticate('facebook-token'), controller.newsDetails);
 
 // ============================================================================
 // Customer  ===============================================================
 // ============================================================================
 
 app.route('/customerdetail/')
-    .get(isLoggedIn, controller.customerDetail);
+    .get(passport.authenticate('facebook-token'), controller.customerDetail);
 
 app.route('/customerlist')
-    .get(isLoggedIn, controller.customerList);
+    .get(passport.authenticate('facebook-token'), controller.customerList);
 
 app.route('/buy/:id')
-    .post(isLoggedIn, controller.buy);
+    .post(passport.authenticate('facebook-token'), controller.buy);
 
 app.route('/sell/:id')
-    .post(isLoggedIn, controller.sell);
+    .post(passport.authenticate('facebook-token'), controller.sell);
 
 app.route('/short/:id')
-    .post(isLoggedIn, controller.short);
+    .post(passport.authenticate('facebook-token'), controller.short);
 
 app.route('/cover/:id')
-    .post(isLoggedIn, controller.cover);
+    .post(passport.authenticate('facebook-token'), controller.cover);
 
 app.route('/takeloan')
-    .post(isLoggedIn, controller.cover);
+    .post(passport.authenticate('facebook-token'), controller.cover);
 
 app.route('/repayloan')
-    .post(isLoggedIn, controller.cover);
+    .post(passport.authenticate('facebook-token'), controller.cover);
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -118,21 +118,8 @@ app.route('/repayloan')
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    else if(req.headers.authorization){
-                var header = req.headers.authorization;
-                console.log('header ' + header );
-                var customer = require('./models/Customer');
-                customer.findOne({'facebook.token' : header}, function(err,cust){
-                if (err){
-                    console.log(err);
-                    res.redirect('/');
-                }
-                // console.log(cust);
-                return next();
-            })
-                return next();
-            }else{
-                console.log('no header');
+        else{
+                // console.log('no header');
                 res.redirect('/');
             }
             
