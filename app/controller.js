@@ -31,53 +31,54 @@ exports.companyDetails = function(req, res) {
 		res.send("unable to fetch company details");
 	}else {
 		customer.findById(req.user._id, function(err, Customer) {
-    if (err){
-		console.log(err);
-		res.send("unable to fetch customer from request");
-	}else {
+            
+            if (err){
+                console.log(err);
+                res.send("unable to fetch customer from request");
+            }else {
+                //Acccount Balance of the user
+                var accountBal = {'accountBalance' : Customer.accountBalance}
+                // compDetails.push(accountBal);
 
-        //Acccount Balance of the user
-		var accountBal = {'accountBalance' : Customer.accountBalance}
-		compDetails.push(accountBal);
+                //Maximum quantity customer can buy
+                var buyMax = {'buyMax' : Math.min(Math.floor(Customer.accountBalance / compDetails.stockPrice),compDetails.availableQuantity)};
+                // compDetails.push(buyMax);
 
-        //Maximum quantity customer can buy
-		var buyMax = {'buyMax' : Math.min(Math.floor(Customer.accountBalance / compDetails.stockPrice),compDetails.availableQuantity)};
-		compDetails.push(buyMax);
+                
+                var stocksHeld;
+                for(var i = 0; i < Customer.stockHoldings.length; i++)
+                {
+                    if(Customer.stockHoldings[i].company === compDetails._id)
+                    {
+                        return stocksHeld = Customer.stockHoldings[i].quantity;
+                    }else {
+                        return stocksHeld = 0;
+                    }
+                }
+                var sellMax = {'sellMax' : stocksHeld}
+                // compDetails.push(sellMax);
 
-        
-		var stocksHeld;
-		for(var i = 0; i < Customer.stockHoldings.length; i++)
-		{
-			if(Customer.stockHoldings[i].company === compDetails._id)
-			{
-				return stocksHeld = Customer.stockHoldings[i].quantity;
-			}else {
-                return stocksHeld = 0;
+                var stocksShorted;
+                for(var i = 0; i < Customer.stockShorted.length; i++)
+                {
+                    if(Customer.stockShorted[i].company === compDetails._id)
+                    {
+                        return stocksShorted = Customer.stockShorted[i].quantity;
+                    }else {
+                        return stocksShorted = 0;
+                    }
+                }
+
+                var shortMax = {'shortMax' :  parameters.shortMax - stocksShorted};
+                // compDetails.push(shortMax);
+
+                var coverMax = { 'coverMax' : Math.min(stocksShorted, Math.floor(Customer.accountBalance / compDetails.stockPrice))};
+                // compDetails.push(coverMax);
+
+                console.log(compDetails,accountBal, buyMax, sellMax, shortMax , coverMax);
+                res.json({compDetails,accountBal, buyMax, sellMax, shortMax , coverMax});
             }
-		}
-		var sellMax = {'sellMax' : stocksHeld}
-        compDetails.push(sellMax);
-
-        var stocksShorted;
-        for(var i = 0; i < Customer.stockShorted.length; i++)
-		{
-			if(Customer.stockShorted[i].company === compDetails._id)
-			{
-				return stocksShorted = Customer.stockShorted[i].quantity;
-			}else {
-                return stocksShorted = 0;
-            }
-		}
-
-        var shortMax = {'shortMax' :  parameters.shortMax - stocksShorted};
-        compDetails.push(shortMax);
-
-        var coverMax = { 'coverMax' : Math.min(stocksShorted, Math.floor(Customer.accountBalance / compDetails.stockPrice))};
-        compDetails.push(coverMax);
-
-		res.json(compDetails);
-	}
-		});
+        });
 	}
   });
 };
