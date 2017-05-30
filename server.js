@@ -34,7 +34,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({
-    secret: 'fbloginboilerplate', // session secret
+    secret: 'bnb2018underdevelopment', // session secret
     resave: true,
     saveUninitialized: true
 }));

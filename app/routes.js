@@ -62,6 +62,12 @@ app.route('/short/:id')
 app.route('/cover/:id')
     .post(isLoggedIn, controller.cover);
 
+app.route('/takeloan')
+    .post(isLoggedIn, controller.cover);
+
+app.route('/repayloan')
+    .post(isLoggedIn, controller.cover);
+
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================

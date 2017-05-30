@@ -37,7 +37,7 @@ exports.companyDetails = function(req, res) {
                 res.send("unable to fetch customer from request");
             }else {
                 //Acccount Balance of the user
-                var accountBal = Customer.accountBalance
+                var accountBalance = Customer.accountBalance
                 // compDetails.push(accountBal);
 
                 //Maximum quantity customer can buy
@@ -76,7 +76,7 @@ exports.companyDetails = function(req, res) {
                 // compDetails.push(coverMax);
 
                 // console.log(compDetails,accountBal, buyMax, sellMax, shortMax , coverMax);
-                res.json({compDetails,accountBal, buyMax, sellMax, shortMax , coverMax});
+                res.json({compDetails,accountBalance, buyMax, sellMax, shortMax , coverMax});
             }
         });
 	}
