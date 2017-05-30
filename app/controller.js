@@ -37,15 +37,15 @@ exports.companyDetails = function(req, res) {
                 res.send("unable to fetch customer from request");
             }else {
                 //Acccount Balance of the user
-                var accountBal = {'accountBalance' : Customer.accountBalance}
+                var accountBal = Customer.accountBalance
                 // compDetails.push(accountBal);
 
                 //Maximum quantity customer can buy
-                var buyMax = {'buyMax' : Math.min(Math.floor(Customer.accountBalance / compDetails.stockPrice),compDetails.availableQuantity)};
+                var buyMax = Math.min(Math.floor(Customer.accountBalance / compDetails.stockPrice),compDetails.availableQuantity);
                 // compDetails.push(buyMax);
 
                 
-                var stocksHeld;
+                var stocksHeld = 0;
                 for(var i = 0; i < Customer.stockHoldings.length; i++)
                 {
                     if(Customer.stockHoldings[i].company === compDetails._id)
@@ -55,10 +55,10 @@ exports.companyDetails = function(req, res) {
                         return stocksHeld = 0;
                     }
                 }
-                var sellMax = {'sellMax' : stocksHeld}
+                var sellMax = stocksHeld;
                 // compDetails.push(sellMax);
 
-                var stocksShorted;
+                var stocksShorted = 0;
                 for(var i = 0; i < Customer.stockShorted.length; i++)
                 {
                     if(Customer.stockShorted[i].company === compDetails._id)
@@ -69,13 +69,14 @@ exports.companyDetails = function(req, res) {
                     }
                 }
 
-                var shortMax = {'shortMax' :  parameters.shortMax - stocksShorted};
+                var shortMax =  parameters.shortMax - stocksShorted;
                 // compDetails.push(shortMax);
 
-                var coverMax = { 'coverMax' : Math.min(stocksShorted, Math.floor(Customer.accountBalance / compDetails.stockPrice))};
+                var coverMax = Math.min(stocksShorted, Math.floor(Customer.accountBalance / compDetails.stockPrice));
                 // compDetails.push(coverMax);
 
-                console.log(compDetails,accountBal, buyMax, sellMax, shortMax , coverMax);
+                // console.log(compDetails,accountBal, buyMax, sellMax, shortMax , coverMax);
+                console.log(merge(compDetails,accountBal, buyMax, sellMax, shortMax , coverMax));
                 res.json({compDetails,accountBal, buyMax, sellMax, shortMax , coverMax});
             }
         });
