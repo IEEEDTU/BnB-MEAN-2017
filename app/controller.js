@@ -76,7 +76,6 @@ exports.companyDetails = function(req, res) {
                 // compDetails.push(coverMax);
 
                 // console.log(compDetails,accountBal, buyMax, sellMax, shortMax , coverMax);
-                console.log(merge(compDetails,accountBal, buyMax, sellMax, shortMax , coverMax));
                 res.json({compDetails,accountBal, buyMax, sellMax, shortMax , coverMax});
             }
         });
