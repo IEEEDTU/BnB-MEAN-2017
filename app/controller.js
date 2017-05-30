@@ -52,24 +52,23 @@ exports.newsDetails = function(req, res) {
 };
 
 exports.customerDetail = function(req, res) {
-  customer.findById(req.params.id, function(err, customerdetail) {
+  customer.findById(req.user._id, function(err, customerdetail) {
     if (err){
 		console.log(err);
-		res.send("unable to fetch company details");
+		res.send("unable to fetch customer details");
 	}else {
 		res.json(customerdetail);
 	}
   });
 };
 
-exports.customerUpdate = function(req, res) {
-  customer.findById(req.params.id, function(err, customerdetail) {
+exports.customerList = function(req, res) {
+  customer.find({}, function(err, customerlist) {
     if (err){
 		console.log(err);
-		res.send("unable to fetch company details");
+		res.send("unable to fetch company list");
 	}else {
-		
-		res.json(customerdetail);
+		res.json(customerlist);
 	}
   });
 };
