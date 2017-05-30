@@ -29,30 +29,38 @@ var controller = require('./controller.js')
 // ============================================================================
 
 app.route('/companylist')
-    .get(isLoggedIn, controller.companyList)
+    .get(isLoggedIn, controller.companyList);;
 
 app.route('/companydetail/:id')
-    .get(isLoggedIn, controller.companyDetails)
+    .get(isLoggedIn, controller.companyDetails);
 
 app.route('/newslist/')
-    .get(isLoggedIn, controller.newsList)
+    .get(isLoggedIn, controller.newsList);
 
 app.route('/newsdetail/:id')
-    .get(isLoggedIn, controller.newsDetails)
+    .get(isLoggedIn, controller.newsDetails);
 
 // ============================================================================
 // Customer  ===============================================================
 // ============================================================================
 
 app.route('/customerdetail/')
-    .get(isLoggedIn, controller.customerDetail)
+    .get(isLoggedIn, controller.customerDetail);
 
 app.route('/customerlist')
-    .get(isLoggedIn, controller.customerList)
+    .get(isLoggedIn, controller.customerList);
 
+app.route('/buy/:id')
+    .post(isLoggedIn, controller.buy);
 
+app.route('/sell/:id')
+    .post(isLoggedIn, controller.sell);
 
+app.route('/short/:id')
+    .post(isLoggedIn, controller.short);
 
+app.route('/cover/:id')
+    .post(isLoggedIn, controller.cover);
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================

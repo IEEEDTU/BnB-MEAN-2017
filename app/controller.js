@@ -2,6 +2,13 @@ var mongoose = require('mongoose')
 var company = require('./models/company');
 var customer = require('./models/Customer');
 var news = require('./models/news');
+var parameters = require('./parameters')
+
+
+
+// ============================================================================
+// Stock Market ===============================================================
+// ============================================================================
 
 exports.companyList = function(req, res) {
   company.find({}, function(err, companies) {
@@ -23,7 +30,54 @@ exports.companyDetails = function(req, res) {
 		console.log(err);
 		res.send("unable to fetch company details");
 	}else {
+		customer.findById(req.user._id, function(err, Customer) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch customer from request");
+	}else {
+
+        //Acccount Balance of the user
+		var accountBal = {'accountBalance' : Customer.accountBalance}
+		compDetails.push(accountBal);
+
+        //Maximum quantity customer can buy
+		var buyMax = {'buyMax' : Math.min(Math.floor(Customer.accountBalance / compDetails.stockPrice),compDetails.availableQuantity)};
+		compDetails.push(buyMax);
+
+        
+		var stocksHeld;
+		for(var i = 0; i < Customer.stockHoldings.length; i++)
+		{
+			if(Customer.stockHoldings[i].company === compDetails._id)
+			{
+				return stocksHeld = Customer.stockHoldings[i].quantity;
+			}else {
+                return stocksHeld = 0;
+            }
+		}
+		var sellMax = {'sellMax' : stocksHeld}
+        compDetails.push(sellMax);
+
+        var stocksShorted;
+        for(var i = 0; i < Customer.stockShorted.length; i++)
+		{
+			if(Customer.stockShorted[i].company === compDetails._id)
+			{
+				return stocksShorted = Customer.stockShorted[i].quantity;
+			}else {
+                return stocksShorted = 0;
+            }
+		}
+
+        var shortMax = {'shortMax' :  parameters.shortMax - stocksShorted};
+        compDetails.push(shortMax);
+
+        var coverMax = { 'coverMax' : Math.min(stocksShorted, Math.floor(Customer.accountBalance / compDetails.stockPrice))};
+        compDetails.push(coverMax);
+
 		res.json(compDetails);
+	}
+		});
 	}
   });
 };
@@ -51,6 +105,13 @@ exports.newsDetails = function(req, res) {
   });
 };
 
+
+
+// ============================================================================
+// Customer ===================================================================
+// ============================================================================
+
+
 exports.customerDetail = function(req, res) {
   customer.findById(req.user._id, function(err, customerdetail) {
     if (err){
@@ -72,3 +133,20 @@ exports.customerList = function(req, res) {
 	}
   });
 };
+
+
+exports.buy = function(req, res){
+
+}
+
+exports.sell = function(req, res){
+
+}
+
+exports.short = function(req, res){
+
+}
+
+exports.cover = function(req, res){
+
+}
