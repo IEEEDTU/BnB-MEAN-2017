@@ -7,11 +7,11 @@
 
 ## Terminal 1
 ```
-	mongod  
+mongod  
 ```
 ## Terminal 2
 
 ```
-	npm install
-  nodemon  
+npm install
+nodemon  
 ```
