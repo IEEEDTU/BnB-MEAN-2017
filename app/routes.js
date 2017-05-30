@@ -44,9 +44,11 @@ app.route('/newsdetail/:id')
 // Customer  ===============================================================
 // ============================================================================
 
-app.route('/customerdetail/:id')
+app.route('/customerdetail/')
     .get(isLoggedIn, controller.customerDetail)
-    .put(isLoggedIn, controller.customerUpdate)
+
+app.route('/customerlist')
+    .get(isLoggedIn, controller.customerList)
 
 
 
@@ -111,7 +113,7 @@ function isLoggedIn(req, res, next) {
                     console.log(err);
                     res.redirect('/');
                 }
-                console.log(cust);
+                // console.log(cust);
                 return next();
             })
                 return next();
