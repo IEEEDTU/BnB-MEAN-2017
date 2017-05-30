@@ -4,14 +4,14 @@
 
 # Running the project
 
-## Terminal 1
-'''
-npm install
-nodemon
-'''
 
+## Terminal 1
+```
+	mongod  
+```
 ## Terminal 2
 
-'''
-mongod
-'''
+```
+	npm install
+  nodemon  
+```
