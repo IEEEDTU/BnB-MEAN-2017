@@ -271,23 +271,43 @@ exports.short = function(req, res){
                 res.send('unable to fetch user')
             }
             quantity = req.body.quantity;
-            if(quantity === null || undefined){
+            if(quantity === null || undefined || quantity >parameters.shortMax){
               res.json({'success':false});
             }
-            var stocksShorted = 0;
-            var index = Customer.stockShorted.findIndex((item) => item.company.toString() === compDetails._id.toString());
-            // for(var i = 0; i < Customer.stockShorted.length; i++)
-            // {
-            //     if(Customer.stockShorted[i].company.toString() === compDetails._id.toString())
-            //     {
-            //         return stocksShorted = Customer.stockShorted[i].quantity;
-            //     }else {
-            //         return stocksShorted = 0;
-            //     }
-            // }
+            try{
+                var index = Customer.stockShorted.findIndex((item) => item.company.toString() === Company._id.toString());
+                console.log(index);
+                var stocksShorted = Customer.stockShorted[index].quantity ;
+            }catch(err){
+                console.log(err);
+                var stocksShorted = 0;
+                Customer.stockShorted.push({
+                    'company' : mongoose.Types.ObjectId(Company._id.toString()),
+                    'quantity' : 0
+                })
+                var index = Customer.stockShorted.findIndex((item) => item.company.toString() === Company._id.toString());
+                console.log(index);
 
-            // var shortMax =  parameters.shortMax - stocksShorted;
-            res.json({'success':true}); 
+            }
+            var shortMax =  parameters.shortMax - stocksShorted;
+            if(quantity>0 && quantity <=shortMax){
+                console.log(index);
+                Customer.stockShorted[index].quantity += quantity;
+                Customer.accountBalance += Company.stockPrice * quantity;
+                Customer.activity.push({
+                    'company' : mongoose.Types.ObjectId(Company._id.toString()),
+                    'timeStamp' : Date.now(),
+                    'action' : 'SHORT',
+                    'quantity' : quantity,
+                    'price' : Company.stockPrice
+
+                });
+                Customer.save();
+                console.log(Customer)
+                res.json({'success':true}); 
+            }else{
+                res.json({'success':false}); 
+            }
         })
 	}
   });
