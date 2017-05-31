@@ -204,7 +204,7 @@ exports.sell = function(req, res){
 	}else {
         customer
         .findById(req.user._id)
-        .populate('stockHoldings.company')
+        // .populate('stockHoldings.company')
         // .populate('activity.company')
         .exec(function(err, Customer){
             // console.log(Customer);
@@ -216,12 +216,12 @@ exports.sell = function(req, res){
             if(quantity === null || undefined){
               res.json({'success':false});
             }
-            var index = Customer.stockHoldings.findIndex((item) => item.company._id.toString() === Company._id.toString());
-            console.log(index);
+            // var index = Customer.stockHoldings.findIndex((item) => item.company._id.toString() === Company._id.toString());
+            // console.log(index);
             var stocksHeld = 0;
             var index = null;
             for(var i = 0; i < Customer.stockHoldings.length; i++){
-                if(Customer.stockHoldings[i].company._id.toString() === Company._id.toString()){
+                if(Customer.stockHoldings[i].company.toString() === Company._id.toString()){
                     stocksHeld = Customer.stockHoldings[i].quantity;
                     index = i;
                 }
@@ -245,7 +245,11 @@ exports.sell = function(req, res){
                 // console.log(Customer)
               res.json({'success':true}); 
             }else{
-                res.json({'success':false});
+                try{
+                    res.json({'success':false});
+                }catch(err){
+                    console.log(err + 'from sell last else');
+                } 
             }
             
         })
@@ -279,7 +283,7 @@ exports.short = function(req, res){
                 console.log(index);
                 var stocksShorted = Customer.stockShorted[index].quantity ;
             }catch(err){
-                console.log(err);
+                // console.log(err);
                 var stocksShorted = 0;
                 Customer.stockShorted.push({
                     'company' : mongoose.Types.ObjectId(Company._id.toString()),
@@ -303,10 +307,14 @@ exports.short = function(req, res){
 
                 });
                 Customer.save();
-                console.log(Customer)
+                console.log(Customer);
                 res.json({'success':true}); 
             }else{
-                res.json({'success':false}); 
+                try{
+                    res.json({'success':false});
+                }catch(err){
+                    console.log(err + 'from short last else');
+                } 
             }
         })
 	}
@@ -314,5 +322,57 @@ exports.short = function(req, res){
 }
 
 exports.cover = function(req, res){
+    company.findById(req.params.id, function(err, Company) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch company");
+	}else {
+        customer
+        .findById(req.user._id)
+        // .populate('stockShorted.company')
+        // .populate('activity.company')
+        .exec(function(err, Customer){
+            // console.log(Customer);
+            if(err){
+                console.log(err);
+                res.send('unable to fetch user')
+            }
+            quantity = req.body.quantity;
+            if(quantity === null || undefined || quantity >parameters.shortMax){
+              res.json({'success':false});
+            }
+            try{
+                var index = Customer.stockShorted.findIndex((item) => item.company.toString() === Company._id.toString());
+                console.log(index);
+                var stocksShorted = Customer.stockShorted[index].quantity ;
+            }catch(err){
+                // console.log(err);
+                res.json({'success':false});
+            }
+            var coverMax = Math.min(stocksShorted, Math.floor(Customer.accountBalance / Company.stockPrice));;
+            if(quantity>0 && quantity <=coverMax){
+                console.log(index);
+                Customer.stockShorted[index].quantity -= quantity;
+                Customer.accountBalance -= Company.stockPrice * quantity;
+                Customer.activity.push({
+                    'company' : mongoose.Types.ObjectId(Company._id.toString()),
+                    'timeStamp' : Date.now(),
+                    'action' : 'COVER',
+                    'quantity' : quantity,
+                    'price' : Company.stockPrice
 
+                });
+                Customer.save();
+                console.log(Customer);
+                res.json({'success':true}); 
+            }else{
+                try{
+                    res.json({'success':false});
+                }catch(err){
+                    console.log(err + ' from cover last else');
+                } 
+            }
+        })
+	}
+  });
 }
