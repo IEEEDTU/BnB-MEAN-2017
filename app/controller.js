@@ -197,11 +197,100 @@ exports.buy = function(req, res){
 }
 
 exports.sell = function(req, res){
+    company.findById(req.params.id, function(err, Company) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch company");
+	}else {
+        customer
+        .findById(req.user._id)
+        .populate('stockHoldings.company')
+        // .populate('activity.company')
+        .exec(function(err, Customer){
+            // console.log(Customer);
+            if(err){
+                console.log(err);
+                res.send('unable to fetch user')
+            }
+            quantity = req.body.quantity;
+            if(quantity === null || undefined){
+              res.json({'success':false});
+            }
+            var index = Customer.stockHoldings.findIndex((item) => item.company._id.toString() === Company._id.toString());
+            console.log(index);
+            var stocksHeld = 0;
+            var index = null;
+            for(var i = 0; i < Customer.stockHoldings.length; i++){
+                if(Customer.stockHoldings[i].company._id.toString() === Company._id.toString()){
+                    stocksHeld = Customer.stockHoldings[i].quantity;
+                    index = i;
+                }
+            }
+            console.log(index);
+            if (0 < quantity  && quantity <= stocksHeld){
+                Customer.stockHoldings[index].quantity -= quantity;
+                Customer.accountBalance += Company.stockPrice*quantity;
+                Company.availableQuantity += quantity;
+                Customer.activity.push({
+                    'company' : mongoose.Types.ObjectId(Company._id.toString()),
+                    'timeStamp' : Date.now(),
+                    'action' : 'SELL',
+                    'quantity' : quantity,
+                    'price' : Company.stockPrice
 
+                });
+                // Customer.populate('stockHoldings.company').populate('history.company')
+                Customer.save();
+                Company.save();
+                // console.log(Customer)
+              res.json({'success':true}); 
+            }else{
+                res.json({'success':false});
+            }
+            
+        })
+	}
+  });
 }
 
-exports.short = function(req, res){
 
+exports.short = function(req, res){
+    company.findById(req.params.id, function(err, Company) {
+    if (err){
+		console.log(err);
+		res.send("unable to fetch company");
+	}else {
+        customer
+        .findById(req.user._id)
+        // .populate('stockShorted.company')
+        // .populate('activity.company')
+        .exec(function(err, Customer){
+            // console.log(Customer);
+            if(err){
+                console.log(err);
+                res.send('unable to fetch user')
+            }
+            quantity = req.body.quantity;
+            if(quantity === null || undefined){
+              res.json({'success':false});
+            }
+            var stocksShorted = 0;
+            var index = Customer.stockShorted.findIndex((item) => item.company.toString() === compDetails._id.toString());
+            // for(var i = 0; i < Customer.stockShorted.length; i++)
+            // {
+            //     if(Customer.stockShorted[i].company.toString() === compDetails._id.toString())
+            //     {
+            //         return stocksShorted = Customer.stockShorted[i].quantity;
+            //     }else {
+            //         return stocksShorted = 0;
+            //     }
+            // }
+
+            // var shortMax =  parameters.shortMax - stocksShorted;
+            res.json({'success':true}); 
+        })
+	}
+  });
 }
 
 exports.cover = function(req, res){
