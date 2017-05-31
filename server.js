@@ -22,6 +22,8 @@ mongoose.connect(configDB.url , function(err){
  if(err) console.log('Unable to connect to DB ' + err);
  else console.log('Connection to DB successful')
 }); // connect to our database
+mongoose.set('debug', true);
+
 require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application

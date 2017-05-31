@@ -48,7 +48,7 @@ exports.companyDetails = function(req, res) {
                 var stocksHeld = 0;
                 for(var i = 0; i < Customer.stockHoldings.length; i++)
                 {
-                    if(Customer.stockHoldings[i].company === compDetails._id)
+                    if(Customer.stockHoldings[i].company.toString() === compDetails._id.toString())
                     {
                         return stocksHeld = Customer.stockHoldings[i].quantity;
                     }else {
@@ -61,7 +61,7 @@ exports.companyDetails = function(req, res) {
                 var stocksShorted = 0;
                 for(var i = 0; i < Customer.stockShorted.length; i++)
                 {
-                    if(Customer.stockShorted[i].company === compDetails._id)
+                    if(Customer.stockShorted[i].company.toString() === compDetails._id.toString())
                     {
                         return stocksShorted = Customer.stockShorted[i].quantity;
                     }else {
@@ -137,13 +137,35 @@ exports.customerList = function(req, res) {
 
 
 exports.buy = function(req, res){
-    customer.findById(req.user._id, function(err, customerdetail) {
+    company.findById(req.user._id, function(err, Company) {
     if (err){
 		console.log(err);
-		res.send("unable to fetch customer details");
+		res.send("unable to fetch company");
 	}else {
-        
-		res.json(customerdetail);
+        customer.findById(req.params.id, function(err, Customer){
+            if (err){
+            console.log(err);
+            res.send("unable to fetch customer");
+        }else {
+            quantity = req.body.quantity;
+            if(quantity === null || undefined){
+              res.json({'success':false});
+            }else {
+              if (0 < quantity  && quantity <= Math.min(Math.floor(Customer.accountBalance / Company.stockPrice),Company.availableQuantity)){
+                for(var i = 0; i < Customer.stockHoldings.length; i++)
+                {
+                    if(Customer.stockHoldings[i].company.toString() === Company._id.toString()){
+                      Customer.stockHoldings[i].quantity += quantity;
+                    }else{
+                      Customer.stockHoldings.push({})
+                    }
+                }
+              res.json({'success':true});  
+              }
+              // res.json({'success':false});
+            }
+        }
+        });
 	}
   });
 }
