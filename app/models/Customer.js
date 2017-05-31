@@ -26,12 +26,12 @@ var customerSchema = mongoose.Schema({
     }],
 
     stockHoldings : [{
-        company : {type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
+        company : {type: mongoose.Schema.Types.ObjectId, ref: 'Company', unique : true},
         quantity : {type: Number, default: 0, min : 0.0},
     }],
 
     stockShorted : [{
-        company : {type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
+        company : {type: mongoose.Schema.Types.ObjectId, ref: 'Company', unique : true},
         quantity : {type: Number, default: 0, min : 0.0},
     }],
 
