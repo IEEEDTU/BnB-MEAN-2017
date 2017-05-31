@@ -137,35 +137,61 @@ exports.customerList = function(req, res) {
 
 
 exports.buy = function(req, res){
-    company.findById(req.user._id, function(err, Company) {
+    company.findById(req.params.id, function(err, Company) {
     if (err){
 		console.log(err);
 		res.send("unable to fetch company");
 	}else {
-        customer.findById(req.params.id, function(err, Customer){
-            if (err){
-            console.log(err);
-            res.send("unable to fetch customer");
-        }else {
+        customer
+        .findById(req.user._id)
+        .populate('stockHoldings.company')
+        // .populate('activity.company')
+        .exec(function(err, Customer){
+            // console.log(Customer);
+            if(err){
+                console.log(err);
+                res.send('unable to fetch user')
+            }
             quantity = req.body.quantity;
             if(quantity === null || undefined){
               res.json({'success':false});
-            }else {
-              if (0 < quantity  && quantity <= Math.min(Math.floor(Customer.accountBalance / Company.stockPrice),Company.availableQuantity)){
-                for(var i = 0; i < Customer.stockHoldings.length; i++)
-                {
-                    if(Customer.stockHoldings[i].company.toString() === Company._id.toString()){
+            }
+            if (0 < quantity  && quantity <= Math.min(Math.floor(Customer.accountBalance / Company.stockPrice),Company.availableQuantity)){
+                var found = false;
+                for(var i = 0; i < Customer.stockHoldings.length; i++){
+                    if(Customer.stockHoldings[i].company._id.toString() === Company._id.toString()){
                       Customer.stockHoldings[i].quantity += quantity;
-                    }else{
-                      Customer.stockHoldings.push({})
+                      found = true;
                     }
                 }
-              res.json({'success':true});  
-              }
-              // res.json({'success':false});
+                if (!found){
+                    Customer.stockHoldings.push({
+                        'company' : mongoose.Types.ObjectId(Company._id.toString()),
+                        'quantity' : quantity
+
+                    });                   
+                }
+
+                Customer.accountBalance -= Company.stockPrice*quantity;
+                Company.availableQuantity -= quantity;
+                Customer.activity.push({
+                    'company' : mongoose.Types.ObjectId(Company._id.toString()),
+                    'timeStamp' : Date.now(),
+                    'action' : 'BUY',
+                    'quantity' : quantity,
+                    'price' : Company.stockPrice
+
+                });
+                // Customer.populate('stockHoldings.company').populate('history.company')
+                Customer.save();
+                Company.save();
+                // console.log(Customer)
+              res.json({'success':true}); 
+            }else{
+                res.json({'success':false});
             }
-        }
-        });
+            
+        })
 	}
   });
 }
