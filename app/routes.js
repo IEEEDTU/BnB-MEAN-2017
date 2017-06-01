@@ -29,13 +29,13 @@ var controller = require('./controller.js')
 // ============================================================================
 
 app.route('/companylist')
-    .get(controller.companyList);
+    .get(passport.authenticate('facebook-token'), controller.companyList);
 
 app.route('/companydetail/:id')
     .get(passport.authenticate('facebook-token'), controller.companyDetails);
 
 app.route('/newslist/')
-    .get(passport.authenticate('facebook-token'), controller.newsList);
+    .get(controller.newsList);
 
 app.route('/newsdetail/:id')
     .get(passport.authenticate('facebook-token'), controller.newsDetails);
