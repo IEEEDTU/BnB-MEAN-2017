@@ -29,7 +29,7 @@ var controller = require('./controller.js')
 // ============================================================================
 
 app.route('/companylist')
-    .get(passport.authenticate('facebook-token'), controller.companyList);;
+    .get(controller.companyList);
 
 app.route('/companydetail/:id')
     .get(passport.authenticate('facebook-token'), controller.companyDetails);
