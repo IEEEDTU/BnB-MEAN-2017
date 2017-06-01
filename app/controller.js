@@ -335,7 +335,7 @@ exports.cover = function(req, res){
             // console.log(Customer);
             if(err){
                 console.log(err);
-                res.send('unable to fetch user')
+                res.send('unable to fetch user');
             }
             quantity = req.body.quantity;
             if(quantity === null || undefined || quantity >parameters.shortMax){
@@ -370,9 +370,62 @@ exports.cover = function(req, res){
                     res.json({'success':false});
                 }catch(err){
                     console.log(err + ' from cover last else');
-                } 
-            }
-        })
-	}
+                };
+            };
+        });
+	};
   });
-}
+};
+
+
+exports.takeLoan = function(req, res){
+    customer
+    .findById(req.user._id)
+    .exec(function(err, Customer){
+        if(err){
+            console.log(err);
+            res.send('unable to fetch user')
+        }
+        if(!Customer.loan.taken){
+            Customer.loan.taken = true;
+            Customer.loan.amount = parameters.loanAmount;
+            Customer.accountBalance += parameters.loanAmount;
+            Customer.loan.takeOutTime = Date.now();
+            console.log(Customer);
+            res.json({'success':true});
+            Customer.save();
+        }else{
+                try{
+                    res.json({'success':false});
+                }catch(err){
+                    console.log(err + ' from take loan last else');
+                };
+        }
+    });
+};
+
+exports.repayLoan = function(req, res){
+    customer
+    .findById(req.user._id)
+    .exec(function(err, Customer){
+        if(err){
+            console.log(err);
+            res.send('unable to fetch user')
+        }
+        if(Customer.loan.taken && Customer.accountBalance >=  Customer.loan.amount){
+            Customer.loan.taken = false;
+            Customer.loan.amount = 0;
+            Customer.accountBalance -= parameters.loanAmount;
+            Customer.loan.repayTime = Date.now();
+            console.log(Customer);
+            res.json({'success':true});
+            Customer.save();
+        }else{
+                try{
+                    res.json({'success':false});
+                }catch(err){
+                    console.log(err + ' from take loan last else');
+                };
+        }
+    });
+};
