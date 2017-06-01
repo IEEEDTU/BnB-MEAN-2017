@@ -35,7 +35,7 @@ app.route('/companydetail/:id')
     .get(passport.authenticate('facebook-token'), controller.companyDetails);
 
 app.route('/newslist/')
-    .get(controller.newsList);
+    .get(passport.authenticate('facebook-token'), controller.newsList);
 
 app.route('/newsdetail/:id')
     .get(passport.authenticate('facebook-token'), controller.newsDetails);
