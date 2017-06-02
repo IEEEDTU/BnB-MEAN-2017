@@ -1,0 +1,32 @@
+<h2>Company Listing</h2>
+
+<ul id="company-listing">
+  <li *ngFor="let company of market ">
+    <div class="single-company">
+
+      <h3>Id: {{company._id}}</h3><br>
+      <h3>Name: {{company.name}}</h3><br>
+      <h3>Symbol: {{company.symbol}}</h3><br>
+      <h3>Description: {{company.description}}</h3><br>
+      <h3>Annual Growth Rate: {{company.annualGrowthRate}}</h3><br>
+      <h3>MarketCap: {{company.marketCap}}</h3><br>
+      <h3>Supplementary Company: {{company.supplementaryCompany}}</h3><br>
+      <h3>Complementary Company: {{company.complementaryCompany}}</h3><br>
+      <h3>History: {{company.history}}</h3><br>
+      <h3>Total Quantity: {{company.totalQuantity}}</h3><br>
+      <h3>Available Quantity: {{company.availableQuantity}}</h3><br>
+      <h3>Stock Price: {{company.stockPrice}}</h3><br>
+       <!--<h3>Name: {{company.time}}</h3><br>
+        <h3>Name: {{company.milliseconds_since_epoch}}</h3><br>
+         <h3>Name: {{company.Accept-Charset}}</h3><br>
+          <h3>Name: {{company.date}}</h3><br>-->
+          <!--<h3>News Text: {{company.newsText}}</h3><br>
+          <h3>Youtube Src: {{company.youtubeSrc}}</h3><br>
+          <h3>Date: {{company.publishedOn}}</h3><br>
+          <h3>Version: {{company.__v}}</h3><br>
+          <h3>Impact: {{company.newsImpact}}</h3><br>
+          <h3>Published: {{company.isPublished}}</h3><br>-->
+      
+    </div> 
+  </li>
+</ul>
