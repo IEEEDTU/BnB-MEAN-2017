@@ -44,10 +44,10 @@ app.route('/newsdetail/:id')
 // Customer  ===============================================================
 // ============================================================================
 
-app.route('/customerdetail/')
+app.route('/customerdetail')
     .get(passport.authenticate('facebook-token'), controller.customerDetail);
 
-app.route('/customerlist')
+app.route('/leaderboard')
     .get(passport.authenticate('facebook-token'), controller.customerList);
 
 app.route('/buy/:id')
@@ -63,10 +63,10 @@ app.route('/cover/:id')
     .post(passport.authenticate('facebook-token'), controller.cover);
 
 app.route('/takeloan')
-    .post(passport.authenticate('facebook-token'), controller.cover);
+    .post(passport.authenticate('facebook-token'), controller.takeLoan);
 
 app.route('/repayloan')
-    .post(passport.authenticate('facebook-token'), controller.cover);
+    .post(passport.authenticate('facebook-token'), controller.repayLoan);
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================

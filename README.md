@@ -15,3 +15,7 @@ mongod
 npm install
 nodemon  
 ```
+
+# TODO
+
+1.Clean code of buy and sell and make similar to that of short.
