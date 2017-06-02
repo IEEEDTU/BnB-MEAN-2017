@@ -176,7 +176,7 @@ exports.buy = function(req, res){
                 console.log(err);
                 res.send('unable to fetch user')
             }
-            quantity = req.body.quantity;
+            quantity = parseInt(req.body.quantity);
             if(quantity === null || undefined){
               res.json({'success':false});
             }
