@@ -1,1 +1,0 @@
-var loginfb = angular.module('bnb', []);
