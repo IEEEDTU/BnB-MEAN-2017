@@ -46,18 +46,18 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 // routes ======================================================================
-// require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Get our API routes
-const api = require('./server/routes/api');
+// const api = require( './server/routes/api');
 
 
 // Set our api routes
-app.use('/api', api);
+// app.use('/api', api);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
