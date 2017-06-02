@@ -21,6 +21,11 @@ D:\mongoDB\env\data\bin\mongod.exe ( or Whatever your path is for mongod.exe fil
 ```
 npm run build  // this will build angular then run run the server
 ```
+OR
+
+```
+nodemon // to run only server.js
+```
 
 # TODO
 
