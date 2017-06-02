@@ -14,7 +14,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var path = require('path');
-var cron = require('cron');
 
 var configDB = require('./config/database.js');
 
@@ -49,7 +48,6 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
-require('./app/tasks')(cron);
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
