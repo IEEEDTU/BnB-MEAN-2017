@@ -276,7 +276,7 @@ var DataService = (function () {
     };
     DataService.prototype.post = function () {
         var body = JSON.stringify({ "quantity": 1 });
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]({ 'access_token': "EAABoUzKDKp0BAHaGQceOPB5F3zI6WBHMdfKPY2HwICVwFOjIh6icdchkPPrGIBxMJxnXQAYC9VvbJjngZCU1Q2IrMOQ3xdfKXMXIQO4ZC6XO1bGpDbnQWdijBQI4LItRC126GY8ZCblgJhRbSlLex0gtyATamB08aCoMtZBfrgZDZD" });
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]({ 'access_token': "EAABoUzKDKp0BAHaGQceOPB5F3zI6WBHMdfKPY2HwICVwFOjIh6icdchkPPrGIBxMJxnXQAYC9VvbJjngZCU1Q2IrMOQ3xdfKXMXIQO4ZC6XO1bGpDbnQWdijBQI4LItRC126GY8ZCblgJhRbSlLex0gtyATamB08aCoMtZBfrgZDZD", 'Content-Type': "application/json" });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* RequestOptions */]({ headers: headers });
         return this.http.post('http://localhost:3000/buy/59298b786c0d0b75ea7cbc01', body, options).map(function (res) { return res.json(); });
     };
