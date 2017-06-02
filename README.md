@@ -4,12 +4,16 @@
 
 # Running the project
 
-
+```
+npm install
+```
 
 ## Terminal 1
 ```
 mongod // in linux
-D:\mongoDB\env\data\bin\mongod.exe ( or Whatever your path is for mongod.exe file ) --dbpath D:\mongoDB\env\db\database ( or Whatever your path is for the database) //for windows
+
+
+D:\mongoDB\env\data\bin\mongod.exe ( or Whatever your path is for mongod.exe file ) --dbpath D:\mongoDB\env\db\database ( or Whatever your path is for the database) // for windows
 
 ```
 ## Terminal 2
