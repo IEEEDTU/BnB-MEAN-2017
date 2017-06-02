@@ -44,7 +44,7 @@ app.route('/newsdetail/:id')
 // Customer  ===============================================================
 // ============================================================================
 
-app.route('/customerdetail/')
+app.route('/customerdetail')
     .get(passport.authenticate('facebook-token'), controller.customerDetail);
 
 app.route('/leaderboard')

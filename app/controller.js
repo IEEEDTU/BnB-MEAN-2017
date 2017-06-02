@@ -114,12 +114,36 @@ exports.newsDetails = function(req, res) {
 
 
 exports.customerDetail = function(req, res) {
-  customer.findById(req.user._id, function(err, customerdetail) {
+  customer
+  .findById(req.user._id)
+  .populate('stockHoldings.company')
+  .populate('stockShorted.company')
+  .exec(function(err, Customer) {
     if (err){
 		console.log(err);
 		res.send("unable to fetch customer details");
 	}else {
-		res.json(customerdetail);
+        var stocksHeldAmount = 0;
+        var portfolio = [];
+        for(var i = 0; i < Customer.stockHoldings.length; i++){
+                stocksHeldAmount += Customer.stockHoldings[i].company.stockPrice * Customer.stockHoldings[i].quantity;
+                portfolio.push({
+                    'companyId': Customer.stockHoldings[i].company._id,
+                    'symbol': Customer.stockHoldings[i].company.symbol,
+                    'stockHolding': Customer.stockHoldings[i].quantity,
+                    'stockShorted': 0,
+                    'stockPrice': Customer.stockHoldings[i].company.stockPrice,
+                });
+        }
+        var stockShortedAmount = 0;
+        for(var i = 0; i < Customer.stockShorted.length; i++){
+            var index = Customer.portfolio.findIndex((item) => item.companyId.toString() === Company._id.toString());
+                stockShortedAmount += Customer.stockShorted[i].company.stockPrice * Customer.stockShorted[i].quantity;
+        }
+
+        var worth = Customer.accountBalance + stocksHeldAmount - stockShortedAmount - Customer.loan.amount;
+        console.log(worth, portfolio);
+		res.json(Customer);
 	}
   });
 };
