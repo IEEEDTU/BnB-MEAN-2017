@@ -15,7 +15,8 @@ module.exports = {
         'clientID'        : '114706539031197', // your App ID
         'clientSecret'    : '8d20971b0312ff3e117c8ebf93cbd9c6', // your App Secret
         'callbackURL'     : cbUrl,
-        'profileFields'   : ['id', 'displayName', 'name', 'gender' , 'email']
+        'profileFields'   : ['id', 'displayName', 'name', 'gender' , 'email'],
+        'enableProof'     : true
     }
 
 };
