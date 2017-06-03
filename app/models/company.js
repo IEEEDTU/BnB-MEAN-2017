@@ -23,8 +23,8 @@ var companySchema = mongoose.Schema({
 	
 	history : [{
         timeStamp : {type: Date, default: Date.now},
-		price : {type: Number, default: 0, min : 0.0},
-		stocksAvialable : {type: Number, default: 0, min : 0.0, max: parameters.maxNumberOfShares},
+		stockPrice : {type: Number, default: 0, min : 0.0},
+		availableQuantity : {type: Number, default: 0, min : 0.0, max: parameters.maxNumberOfShares},
 	}],
 
 	complementaryCompany : [{
