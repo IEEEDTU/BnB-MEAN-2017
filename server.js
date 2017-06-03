@@ -14,7 +14,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var path = require('path');
-var cron = require('cron');
+// var cron = require('cron');
 var configDB = require('./config/database.js');
 
 mongoose.Promise = global.Promise;
